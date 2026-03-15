@@ -13,7 +13,7 @@ from ..service.configservice import scrapingConfService, localConfService, _Scra
 from ..utils.filehelper import linkFile, moveSubsbyFilepath
 from ..utils.number_parser import FileNumInfo
 from scrapinglib import search, http_client
-from utils import image_downloader
+from ..utils import image_downloader
 
 
 def escapePath(path, escape_literals: str):
