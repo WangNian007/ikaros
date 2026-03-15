@@ -12,7 +12,8 @@ from ..service.taskservice import taskService
 from ..service.configservice import scrapingConfService, localConfService, _ScrapingConfigs
 from ..utils.filehelper import linkFile, moveSubsbyFilepath
 from ..utils.number_parser import FileNumInfo
-from scrapinglib import search, httprequest
+from scrapinglib import search, http_client
+from utils import image_downloader
 
 
 def escapePath(path, escape_literals: str):
@@ -103,7 +104,7 @@ def download_file_with_filename(url, filename, path):
     if not os.path.exists(path):
         os.makedirs(path)
     try:
-        r = httprequest.get(url, proxies=proxies, return_type='object')
+        r = image_downloader.get(url, proxies=proxies, return_type='object')
         if r == '':
             current_app.logger.error(f"[-] download source not found! {url}")
             return False
@@ -402,9 +403,7 @@ def core_main(filepath, numinfo: FileNumInfo, conf: _ScrapingConfigs, specifieds
 
     """
 
-    c_sources = conf.site_sources
-    if not c_sources:
-        c_sources = "javlibrary,javdb,javbus,airav,fanza,xcity,jav321,mgstage,fc2,avsox,dlsite,carib,madou,mv91,getchu,gcolle"
+    c_sources = None
     configProxy = localConfService.getProxyConfig()
     proxies = configProxy.proxies() if configProxy.enable else None
     json_data = search(numinfo.num, c_sources,
